@@ -10,7 +10,7 @@ var {
   Button,
   TouchableHighlight
 } = React;
-
+var LocalStorage = require('NativeModules').LocalStorage;
 var RepoList = require('./components/RepoList.ios');
 
 var TestProject = React.createClass({
@@ -20,6 +20,15 @@ var TestProject = React.createClass({
       userdata: null,
       repodata: null
     }
+  },
+
+  componentDidMount: function() {
+    LocalStorage.get("username", (err, value) => {
+      if (err) {
+        return;
+      }
+      this.setState({username: value});
+    });
   },
 
   render: function() {
@@ -45,6 +54,7 @@ var TestProject = React.createClass({
 
           <TextInput ref="MyInput" 
             style={styles.searchInput} 
+            value={this.state.username}
             placeholder='Search for github user' 
             onChange={this._onInputChanged} />
 
@@ -65,6 +75,7 @@ var TestProject = React.createClass({
 
   _onInputChanged: function(ev) {
     this.setState({username: ev.nativeEvent.text});
+    LocalStorage.set("username", ev.nativeEvent.text);
   },
 
   _onPress: function(ev) {
