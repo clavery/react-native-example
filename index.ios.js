@@ -8,10 +8,13 @@ var {
   TextInput,
   View,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  DatePickerIOS,
+  AlertIOS
 } = React;
 var LocalStorage = require('NativeModules').LocalStorage;
 var RepoList = require('./components/RepoList.ios');
+var Orientation = require('./Orientation.ios');
 
 var TestProject = React.createClass({
   getInitialState: function() {
@@ -22,6 +25,10 @@ var TestProject = React.createClass({
     }
   },
 
+  _orientationDidChange: function(orientation) {
+    AlertIOS.alert("Orientation Changed", orientation);
+  },
+
   componentDidMount: function() {
     LocalStorage.get("username", (err, value) => {
       if (err) {
@@ -29,6 +36,12 @@ var TestProject = React.createClass({
       }
       this.setState({username: value});
     });
+
+    Orientation.addOrientationListener(this._orientationDidChange);
+  },
+
+  componentWillUnmount: function() {
+    Orientation.removeOrientationListener(this._orientationDidChange);
   },
 
   render: function() {
