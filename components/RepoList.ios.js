@@ -3,7 +3,8 @@ var {
   StyleSheet,
   Text,
   View,
-  ListView
+  ListView,
+  ScrollView
 } = React;
 
 var RepoList = React.createClass({
